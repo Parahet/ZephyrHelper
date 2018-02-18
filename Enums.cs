@@ -6,13 +6,11 @@ namespace ZephyrHelper
     {
         public enum ExecutionStatus
         {
-            [Text("{\"status\":\"1\"}")] Pass,
-            [Text("{\"status\":\"2\"}")] Fail,
-            [Text("{\"status\":\"3\"}")] WIP
+            [Text("{\"status\":\"-1\"}")] UNEXECUTED,
+            [Text("{\"status\":\"1\"}")] PASS,
+            [Text("{\"status\":\"2\"}")] FAIL,
+            [Text("{\"status\":\"3\"}")] WIP,
+            [Text("{\"status\":\"4\"}")] BLOCKED
         }
-
-        public static string Pass = "{\"status\":\"1\"}";
-        public static string Fail = "{\"status\":\"2\"}";
-        public static string WIP = "{\"status\":\"3\"}";
     }
 }

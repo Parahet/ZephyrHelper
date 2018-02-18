@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
 using Xunit;
 
 namespace ZephyrHelper
@@ -17,7 +9,31 @@ namespace ZephyrHelper
         [Fact]
         public void test01()
         {
-            string responseData;
+            var projectKey = "CU584";
+            var cycleName = "Auto test set";
+            var auth = new Authorization("eugene.parakhonko", "C123456asd");
+            var jiraBaseUrl = "https://jira.effective-soft.com";
+
+            var driver = new ZephyrDriver(jiraBaseUrl, auth);
+            var projInfo = driver.GetProjectInfo(projectKey);
+
+            /* var version = "Android_1.0.417";
+            var cycles = driver.GetCycles(projInfo.Id,projInfo.Versions.First(v=>v.Name == version).Id);
+            Console.Write(cycles);*/
+
+            var cycleId = driver.GetCycleIdByName(projInfo.Id, cycleName);
+            var executions = driver.GetCycleExecutions(cycleId);
+            foreach (var execution in executions)
+            {
+                Console.Write(execution.IssueKey);
+                driver.UpdateExecutionStatus(execution.Id,Enums.ExecutionStatus.PASS);
+                driver.AttachFileToExecution(execution.Id,@"D:\Temp\IOS.PNG");
+            }
+            
+            
+
+            //------------------------------------------------------------------------------------------
+            /*string responseData;
             /*static async Task GetListOfExecution()
             {
                 var baseAddress = new Uri("http://jira.effective-soft.com/rest/zapi/latest/cycle?projectId=10000&versionId=10100");
@@ -32,7 +48,7 @@ namespace ZephyrHelper
                         responseData = await response.Content.ReadAsStringAsync();
                     }
                 }
-            }*/
+            }
 
             string jiraBaseUrl = "http://jira.effective-soft.com";
             string userName = "Eugene.Parakhonko";
@@ -80,7 +96,7 @@ namespace ZephyrHelper
                     StreamReader reader = new StreamReader(stream, Encoding.UTF8);
                     String responseString2 = reader.ReadToEnd();
                     Console.Write(responseString2);
-                }*/
+                }
 
             String payload = "{\"lastTestResult\":{ \"executionStatus\": \"3\"}}"; // 2 = fail, 1= pass and 3= WIP 
             String statusPass = "{\"status\":\"1\"}"; // 2 = fail, 1= pass and 3= WIP 
@@ -121,7 +137,7 @@ namespace ZephyrHelper
 
                     var responseStr = client.UploadString(putReq3, "PUT", statusWIP);
                     Console.Write(responseStr);
-                }*/
+                }
             var path = "D:\\SearchMarket12884.Jpeg";
             var postReq =
                 $@"https://jira.effective-soft.com/rest/zapi/latest/attachment?entityId={exId2}&entityType=execution";
@@ -137,7 +153,7 @@ namespace ZephyrHelper
 
 				var responseStr = client.UploadString(postReq, "post", files);
 				Console.Write(responseStr);
-			}**/
+			}*
 
             var restClient = new RestClient("https://jira.effective-soft.com");
             {
@@ -154,7 +170,7 @@ namespace ZephyrHelper
                 IRestResponse responseattachment = restClient.Execute(requestattachment);
                 Console.Write(responseattachment);
             }
-
+            */
         }
     }
 }
